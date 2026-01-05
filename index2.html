@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confitería San Ángel - San Valentín 2026</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fff0f3; color: #4a0e0e; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 20px; background: #ff4d6d; color: white; border-radius: 15px; margin-bottom: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .producto { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .carrito { position: fixed; bottom: 20px; right: 20px; background: #c9184a; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); width: 250px; }
+        button { background: #ff758f; border: none; color: white; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #ff4d6d; }
+        .checkout-btn { width: 100%; background: #25d366; margin-top: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Confitería San Ángel</h1>
+        <p>Catálogo San Valentín 2026 ❤️</p>
+    </header>
+
+    <div id="lista-productos">
+        </div>
+</div>
+
+<div class="carrito" id="carrito-display">
+    <h3>Tu Pedido</h3>
+    <div id="items-carrito">El carrito está vacío</div>
+    <hr>
+    <strong>Total: $<span id="total-precio">0</span></strong>
+    <button class="checkout-btn" onclick="enviarWhatsApp()">Pedir por WhatsApp</button>
+</div>
+
+<script>
+    const productos = [
+        [span_2](start_span){ id: 1, nombre: "Rollito San Valentín", precio: 85 }, //[span_2](end_span)
+        [span_3](start_span){ id: 2, nombre: "Corazón Tricolor", precio: 80 }, //[span_3](end_span)
+        [span_4](start_span){ id: 3, nombre: "Corazón Meloso", precio: 85 }, //[span_4](end_span)
+        [span_5](start_span){ id: 4, nombre: "Corazón Diamante", precio: 90 }, //[span_5](end_span)
+        [span_6](start_span){ id: 5, nombre: "Osito 3D", precio: 100 }, //[span_6](end_span)
+        [span_7](start_span){ id: 6, nombre: "Sandía Enchilada", precio: 85 }, //[span_7](end_span)
+        [span_8](start_span){ id: 7, nombre: "Rosa Roja Gigante", precio: 90 }, //[span_8](end_span)
+        [span_9](start_span){ id: 8, nombre: "Woman 1 (Exótica)", precio: 100 } //[span_9](end_span)
+    ];
+
+    let carrito = [];
+
+    function renderProductos() {
+        const contenedor = document.getElementById('lista-productos');
+        contenedor.innerHTML = productos.map(p => `
+            <div class="producto">
+                <div>
+                    <strong>${p.nombre}</strong><br>
+                    <small>$${p.precio}.00 / kilo</small>
+                </div>
+                <button onclick="agregarAlCarrito(${p.id})">Agregar</button>
+            </div>
+        `).join('');
+    }
+
+    function agregarAlCarrito(id) {
+        const prod = productos.find(p => p.id === id);
+        carrito.push(prod);
+        actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+        const div = document.getElementById('items-carrito');
+        const totalSpan = document.getElementById('total-precio');
+        if (carrito.length === 0) {
+            div.innerHTML = "El carrito está vacío";
+            totalSpan.innerText = "0";
+            return;
+        }
+        div.innerHTML = carrito.map(i => `<div>- ${i.nombre} ($${i.precio})</div>`).join('');
+        const total = carrito.reduce((sum, i) => sum + i.precio, 0);
+        totalSpan.innerText = total;
+    }
+
+    function enviarWhatsApp() {
+        if (carrito.length === 0) return alert("¡Agrega productos primero!");
+        let mensaje = "Hola Confitería San Ángel, quiero realizar el siguiente pedido:\n\n";
+        carrito.forEach(i => mensaje += `- ${i.nombre}: $${i.precio}\n`);
+        const total = carrito.reduce((sum, i) => sum + i.precio, 0);
+        mensaje += `\n*Total estimado: $${total}*\n\n¿Me indican los datos para la transferencia del anticipo?`;
+        
+        const url = `https://wa.me/525544865766?text=${encodeURIComponent(mensaje)}`;
+        window.open(url, '_blank');
+    }
+
+    renderProductos();
+</script>
+
+</body>
+</html>
